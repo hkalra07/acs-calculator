@@ -56,7 +56,7 @@ class ACSCalculator {
                 this.showNotification('⚠️ Backend not fully configured', 'warning');
             }
             
-            // Load job categories
+            // Load job categories (but don't initialize dropdown yet)
             await this.loadJobCategories();
         } catch (error) {
             console.warn('Backend connection failed:', error);
@@ -72,9 +72,6 @@ class ACSCalculator {
                 const categoriesText = await response.text();
                 this.allCategories = categoriesText.trim().split('\n').filter(cat => cat.trim());
                 
-                // Initialize searchable dropdown
-                this.initializeSearchableDropdown();
-                
                 console.log(`Loaded ${this.allCategories.length} job categories`);
             } else {
                 console.error('Failed to load job categories');
@@ -85,12 +82,24 @@ class ACSCalculator {
     }
 
     initializeSearchableDropdown() {
+        console.log('Initializing searchable dropdown...');
         const searchInput = document.getElementById('jobCategorySearch');
         const dropdown = document.getElementById('categoryDropdown');
         const selectedCategory = document.getElementById('selectedCategory');
         const searchableDropdown = document.querySelector('.searchable-dropdown');
         
-        if (!searchInput || !dropdown || !selectedCategory) return;
+        console.log('Elements found:', {
+            searchInput: !!searchInput,
+            dropdown: !!dropdown,
+            selectedCategory: !!selectedCategory,
+            searchableDropdown: !!searchableDropdown,
+            categoriesCount: this.allCategories ? this.allCategories.length : 0
+        });
+        
+        if (!searchInput || !dropdown || !selectedCategory) {
+            console.error('Missing required elements for searchable dropdown');
+            return;
+        }
 
         let filteredCategories = [...this.allCategories];
         let selectedIndex = -1;
@@ -544,6 +553,7 @@ class ACSCalculator {
 // Initialize the calculator when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     const calculator = new ACSCalculator();
+    window.calculator = calculator; // Make calculator globally available
     
     // Force dropdown styling after a short delay to ensure DOM is fully loaded
     setTimeout(() => {
@@ -601,6 +611,11 @@ const searchCategory = document.getElementById('searchCategory');
 findSimilarBtn.addEventListener('click', () => {
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    
+    // Initialize searchable dropdown when modal opens
+    if (window.calculator && window.calculator.allCategories) {
+        window.calculator.initializeSearchableDropdown();
+    }
 });
 
 // Close modal
