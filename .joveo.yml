@@ -20,7 +20,7 @@ deploy:
   type: web
 
   # Command to start the application in production
-  start_command: python3 acs_server.py
+  start_command: ./start.sh
 
   # Port the application listens on (must match server configuration)
   port: 3000
@@ -32,6 +32,7 @@ deploy:
   environment_variables:
     PORT: 3000
     PYTHONUNBUFFERED: 1 # Ensure Python output is unbuffered for logs
+    NODE_ENV: production
 
 # Optional: Define custom domains or other platform-specific settings
 # domains:

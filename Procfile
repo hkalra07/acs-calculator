@@ -1,1 +1,1 @@
-web: python3 acs_server.py
+web: ./start.sh
