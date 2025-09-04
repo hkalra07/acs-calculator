@@ -371,8 +371,10 @@ class ACSCalculatorHandler(BaseHTTPRequestHandler):
         """Custom logging for requests"""
         logger.info(f"{self.address_string()} - {format % args}")
 
-def run_server(port=8000):
+def run_server(port=None):
     """Run the ACS Calculator server"""
+    if port is None:
+        port = int(os.getenv('PORT', 8000))
     server_address = ('', port)
     httpd = HTTPServer(server_address, ACSCalculatorHandler)
     

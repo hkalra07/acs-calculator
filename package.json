@@ -1,0 +1,17 @@
+{
+  "name": "acs-calculator",
+  "version": "2.0.0",
+  "description": "Joveo ACS Calculator - Application Complexity Scoring Tool",
+  "main": "acs_calculator.html",
+  "scripts": {
+    "start": "python3 acs_server.py",
+    "dev": "python3 acs_server.py",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop acs-calculator",
+    "pm2:restart": "pm2 restart acs-calculator",
+    "pm2:logs": "pm2 logs acs-calculator"
+  },
+  "keywords": ["acs", "calculator", "joveo", "complexity", "scoring"],
+  "author": "Joveo Team",
+  "license": "MIT"
+}
