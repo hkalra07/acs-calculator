@@ -1,20 +1,38 @@
-name: acs-calculator
-version: 2.0.0
-description: Joveo ACS Calculator - Application Complexity Scoring Tool
+# Joveo CI/CD Pipeline Configuration
+# This file defines how the ACS Calculator application should be built and deployed on the Joveo platform.
 
+# Application Name (must match the subdomain)
+app_name: acscalculator
+
+# Build Configuration
 build:
+  # Specify the build environment (e.g., Python, Node.js, Docker)
+  environment: python
+
+  # Commands to run during the build process
   commands:
+    - pip install --upgrade pip
     - pip install -r requirements.txt
-  python: 3.12
 
+# Deployment Configuration
 deploy:
-  web:
-    command: python3 acs_server.py
-    port: 3000
-    env:
-      PORT: 3000
-      NODE_ENV: production
+  # Specify the deployment type (e.g., web, worker)
+  type: web
 
-health_check:
-  path: /status
-  timeout: 30
+  # Command to start the application in production
+  start_command: python3 acs_server.py
+
+  # Port the application listens on (must match server configuration)
+  port: 3000
+
+  # Health check endpoint to verify successful deployment
+  health_check_path: /status
+
+  # Environment variables specific to production
+  environment_variables:
+    PORT: 3000
+    PYTHONUNBUFFERED: 1 # Ensure Python output is unbuffered for logs
+
+# Optional: Define custom domains or other platform-specific settings
+# domains:
+#   - acscalculator.coder.prod.joveo.com

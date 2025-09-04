@@ -8,7 +8,7 @@ import os
 
 def check_health():
     """Check if all routes are working in production"""
-    base_url = "https://acscalculator.coder.prod.joveo.com"
+    base_url = "https://buildingfeed.coder.prod.joveo.com"
     
     routes = [
         "/",
