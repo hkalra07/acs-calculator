@@ -1,0 +1,20 @@
+name: acs-calculator
+version: 2.0.0
+description: Joveo ACS Calculator - Application Complexity Scoring Tool
+
+build:
+  commands:
+    - pip install -r requirements.txt
+  python: 3.12
+
+deploy:
+  web:
+    command: python3 acs_server.py
+    port: 3000
+    env:
+      PORT: 3000
+      NODE_ENV: production
+
+health_check:
+  path: /status
+  timeout: 30

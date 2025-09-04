@@ -375,7 +375,7 @@ def run_server(port=None):
     """Run the ACS Calculator server"""
     if port is None:
         port = int(os.getenv('PORT', 8000))
-    server_address = ('', port)
+    server_address = ('0.0.0.0', port)
     httpd = HTTPServer(server_address, ACSCalculatorHandler)
     
     print(f"🚀 ACS Calculator Server starting on port {port}")
