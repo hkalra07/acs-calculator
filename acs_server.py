@@ -58,7 +58,7 @@ class ACSCalculatorHandler(BaseHTTPRequestHandler):
             self.handle_spreadsheet_info()
         elif parsed_url.path == '/get-all-clients':
             self.handle_get_all_clients()
-        elif parsed_url.path.endswith(('.html', '.css', '.js', '.jpg', '.jpeg', '.png', '.svg')):
+        elif parsed_url.path.endswith(('.html', '.css', '.js', '.jpg', '.jpeg', '.png', '.svg', '.txt')):
             self.handle_static_file(parsed_url.path)
         else:
             self.send_error(404, "Endpoint not found")
@@ -109,6 +109,8 @@ class ACSCalculatorHandler(BaseHTTPRequestHandler):
                 content_type = 'image/svg+xml'
             elif file_path.endswith(('.jpg', '.jpeg')):
                 content_type = 'image/jpeg'
+            elif file_path.endswith('.txt'):
+                content_type = 'text/plain'
             
             # Read and serve file
             with open(file_path, 'rb') as f:

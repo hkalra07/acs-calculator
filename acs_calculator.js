@@ -55,9 +55,44 @@ class ACSCalculator {
             } else {
                 this.showNotification('⚠️ Backend not fully configured', 'warning');
             }
+            
+            // Load job categories
+            await this.loadJobCategories();
         } catch (error) {
             console.warn('Backend connection failed:', error);
             this.showNotification('❌ Backend connection failed', 'error');
+        }
+    }
+
+    async loadJobCategories() {
+        try {
+            // Load categories from the text file we created
+            const response = await fetch('/job_categories.txt');
+            if (response.ok) {
+                const categoriesText = await response.text();
+                const categories = categoriesText.trim().split('\n').filter(cat => cat.trim());
+                
+                // Populate the dropdown
+                const jobCategorySelect = document.getElementById('jobCategorySelect');
+                if (jobCategorySelect) {
+                    // Clear existing options except the first one
+                    jobCategorySelect.innerHTML = '<option value="">-- Select a category --</option>';
+                    
+                    // Add all categories
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category;
+                        option.textContent = category;
+                        jobCategorySelect.appendChild(option);
+                    });
+                    
+                    console.log(`Loaded ${categories.length} job categories`);
+                }
+            } else {
+                console.error('Failed to load job categories');
+            }
+        } catch (error) {
+            console.error('Error loading job categories:', error);
         }
     }
 
@@ -448,7 +483,7 @@ const modal = document.getElementById('similarClientsModal');
 const findSimilarBtn = document.getElementById('findSimilarBtn');
 const closeBtn = document.querySelector('.close');
 const searchBtn = document.getElementById('searchSimilarBtn');
-const jobTitleInput = document.getElementById('jobTitleInput');
+// jobTitleInput removed - now using only dropdown
 const jobCategorySelect = document.getElementById('jobCategorySelect');
 const resultsSection = document.getElementById('resultsSection');
 const loadingSection = document.getElementById('loadingSection');
@@ -480,35 +515,19 @@ window.addEventListener('click', (event) => {
 
 // Reset modal state
 function resetModal() {
-    jobTitleInput.value = '';
     jobCategorySelect.value = '';
     resultsSection.style.display = 'none';
     loadingSection.style.display = 'none';
     clientsList.innerHTML = '';
 }
 
-// Handle category selection
-jobCategorySelect.addEventListener('change', () => {
-    if (jobCategorySelect.value) {
-        jobTitleInput.value = '';
-    }
-});
-
-// Handle job title input
-jobTitleInput.addEventListener('input', () => {
-    if (jobTitleInput.value) {
-        jobCategorySelect.value = '';
-    }
-});
-
 // Search for similar clients
 searchBtn.addEventListener('click', async () => {
-    const jobTitle = jobTitleInput.value.trim();
     const jobCategory = jobCategorySelect.value;
-            const country = countrySelect.value.trim() || null;
+    const country = countrySelect.value.trim() || null;
     
-    if (!jobTitle && !jobCategory) {
-        alert('Please enter a job title or select a category');
+    if (!jobCategory) {
+        alert('Please select a job category');
         return;
     }
     
@@ -523,7 +542,7 @@ searchBtn.addEventListener('click', async () => {
         // Prepare search parameters
         const searchParams = {
             target_acs: currentAcsScore,
-            target_category: jobCategory || jobTitle,
+            target_category: jobCategory,
             target_country: country || null,
             max_results: 10
         };
@@ -589,12 +608,8 @@ function displayResults(response, category, country) {
                 
                 <div class="client-stats">
                     <div class="stat-item">
-                        <div class="stat-label">Job Count</div>
+                        <div class="stat-label">Job Categories Count</div>
                         <div class="stat-value">${client.job_count.toLocaleString()}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Country</div>
-                        <div class="stat-value">${client.country || 'Unknown'}</div>
                     </div>
                 </div>
                 
