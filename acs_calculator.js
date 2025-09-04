@@ -70,30 +70,135 @@ class ACSCalculator {
             const response = await fetch('/job_categories.txt');
             if (response.ok) {
                 const categoriesText = await response.text();
-                const categories = categoriesText.trim().split('\n').filter(cat => cat.trim());
+                this.allCategories = categoriesText.trim().split('\n').filter(cat => cat.trim());
                 
-                // Populate the dropdown
-                const jobCategorySelect = document.getElementById('jobCategorySelect');
-                if (jobCategorySelect) {
-                    // Clear existing options except the first one
-                    jobCategorySelect.innerHTML = '<option value="">-- Select a category --</option>';
-                    
-                    // Add all categories
-                    categories.forEach(category => {
-                        const option = document.createElement('option');
-                        option.value = category;
-                        option.textContent = category;
-                        jobCategorySelect.appendChild(option);
-                    });
-                    
-                    console.log(`Loaded ${categories.length} job categories`);
-                }
+                // Initialize searchable dropdown
+                this.initializeSearchableDropdown();
+                
+                console.log(`Loaded ${this.allCategories.length} job categories`);
             } else {
                 console.error('Failed to load job categories');
             }
         } catch (error) {
             console.error('Error loading job categories:', error);
         }
+    }
+
+    initializeSearchableDropdown() {
+        const searchInput = document.getElementById('jobCategorySearch');
+        const dropdown = document.getElementById('categoryDropdown');
+        const selectedCategory = document.getElementById('selectedCategory');
+        const searchableDropdown = document.querySelector('.searchable-dropdown');
+        
+        if (!searchInput || !dropdown || !selectedCategory) return;
+
+        let filteredCategories = [...this.allCategories];
+        let selectedIndex = -1;
+
+        // Show dropdown options
+        const showOptions = () => {
+            searchableDropdown.classList.add('active');
+            this.renderOptions(filteredCategories);
+        };
+
+        // Hide dropdown options
+        const hideOptions = () => {
+            searchableDropdown.classList.remove('active');
+        };
+
+        // Render options in dropdown
+        this.renderOptions = (categories) => {
+            dropdown.innerHTML = '';
+            
+            if (categories.length === 0) {
+                dropdown.innerHTML = '<div class="dropdown-option no-results">No categories found</div>';
+                return;
+            }
+
+            categories.forEach((category, index) => {
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                option.textContent = category;
+                
+                if (index === selectedIndex) {
+                    option.classList.add('highlighted');
+                }
+                
+                option.addEventListener('click', () => {
+                    this.selectCategory(category);
+                });
+                
+                dropdown.appendChild(option);
+            });
+        };
+
+        // Select a category
+        this.selectCategory = (category) => {
+            searchInput.value = category;
+            selectedCategory.value = category;
+            hideOptions();
+        };
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query === '') {
+                filteredCategories = [...this.allCategories];
+            } else {
+                filteredCategories = this.allCategories.filter(category => 
+                    category.toLowerCase().includes(query)
+                );
+            }
+            
+            selectedIndex = -1;
+            showOptions();
+        });
+
+        // Focus events
+        searchInput.addEventListener('focus', showOptions);
+        searchInput.addEventListener('blur', (e) => {
+            // Delay hiding to allow clicks on options
+            setTimeout(() => {
+                if (!searchableDropdown.contains(document.activeElement)) {
+                    hideOptions();
+                }
+            }, 150);
+        });
+
+        // Keyboard navigation
+        searchInput.addEventListener('keydown', (e) => {
+            const options = dropdown.querySelectorAll('.dropdown-option:not(.no-results)');
+            
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    selectedIndex = Math.min(selectedIndex + 1, options.length - 1);
+                    this.updateHighlight(options);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    selectedIndex = Math.max(selectedIndex - 1, -1);
+                    this.updateHighlight(options);
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (selectedIndex >= 0 && options[selectedIndex]) {
+                        this.selectCategory(options[selectedIndex].textContent);
+                    }
+                    break;
+                case 'Escape':
+                    hideOptions();
+                    break;
+            }
+        });
+
+        // Update highlight
+        this.updateHighlight = (options) => {
+            options.forEach((option, index) => {
+                option.classList.toggle('highlighted', index === selectedIndex);
+            });
+        };
     }
 
     handleFormSubmit(e) {
@@ -483,8 +588,9 @@ const modal = document.getElementById('similarClientsModal');
 const findSimilarBtn = document.getElementById('findSimilarBtn');
 const closeBtn = document.querySelector('.close');
 const searchBtn = document.getElementById('searchSimilarBtn');
-// jobTitleInput removed - now using only dropdown
-const jobCategorySelect = document.getElementById('jobCategorySelect');
+// jobTitleInput removed - now using searchable dropdown
+const jobCategorySearch = document.getElementById('jobCategorySearch');
+const selectedCategory = document.getElementById('selectedCategory');
 const resultsSection = document.getElementById('resultsSection');
 const loadingSection = document.getElementById('loadingSection');
 const clientsList = document.getElementById('clientsList');
@@ -515,7 +621,8 @@ window.addEventListener('click', (event) => {
 
 // Reset modal state
 function resetModal() {
-    jobCategorySelect.value = '';
+    jobCategorySearch.value = '';
+    selectedCategory.value = '';
     resultsSection.style.display = 'none';
     loadingSection.style.display = 'none';
     clientsList.innerHTML = '';
@@ -523,7 +630,7 @@ function resetModal() {
 
 // Search for similar clients
 searchBtn.addEventListener('click', async () => {
-    const jobCategory = jobCategorySelect.value;
+    const jobCategory = selectedCategory.value;
     const country = countrySelect.value.trim() || null;
     
     if (!jobCategory) {

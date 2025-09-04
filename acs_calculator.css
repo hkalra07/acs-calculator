@@ -1243,3 +1243,100 @@ select, select option {
         padding: 0.75rem 0.5rem;
     }
 }
+
+/* Searchable Dropdown Styles */
+.searchable-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.searchable-dropdown input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.searchable-dropdown input:focus {
+    outline: none;
+    border-color: #202058;
+    box-shadow: 0 0 0 3px rgba(32, 32, 88, 0.1);
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #64748b;
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.searchable-dropdown.active .dropdown-arrow {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.searchable-dropdown.active .dropdown-options {
+    display: block;
+}
+
+.dropdown-option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.dropdown-option:hover {
+    background-color: #f8fafc;
+}
+
+.dropdown-option:last-child {
+    border-bottom: none;
+}
+
+.dropdown-option.highlighted {
+    background-color: #e0e7ff;
+    color: #202058;
+}
+
+.dropdown-option.no-results {
+    padding: 1rem;
+    text-align: center;
+    color: #64748b;
+    font-style: italic;
+    cursor: default;
+}
+
+.dropdown-option.no-results:hover {
+    background-color: transparent;
+}
+
+/* Search highlighting */
+.search-highlight {
+    background-color: #fef3c7;
+    font-weight: 600;
+}

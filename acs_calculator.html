@@ -276,11 +276,15 @@
                                 <p>Find clients with similar job categories and ACS complexity levels</p>
                                 
                                 <div class="input-group">
-                                    <label for="jobCategorySelect">Select Job Category:</label>
-                                    <select id="jobCategorySelect">
-                                        <option value="">-- Select a category --</option>
-                                        <!-- Categories will be populated dynamically -->
-                                    </select>
+                                    <label for="jobCategorySearch">Search Job Category:</label>
+                                    <div class="searchable-dropdown">
+                                        <input type="text" id="jobCategorySearch" placeholder="Type to search job categories..." autocomplete="off">
+                                        <div class="dropdown-arrow">▼</div>
+                                        <div class="dropdown-options" id="categoryDropdown">
+                                            <!-- Options will be populated dynamically -->
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="selectedCategory" value="">
                                 </div>
                                 
                                 <div class="input-group">
