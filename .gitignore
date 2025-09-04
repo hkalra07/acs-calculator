@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Versions directory
+versions/
+
+# Google Sheets config (contains sensitive data)
+google_sheets_config.json
+
+# Original uploaded files
+F302D91E-6209-4C08-83A2-C675F2C3D57C.*
+
+# Large CSV files (over 100MB)
+2025-08-05 2_48pm.csv
+2025-08-29 3_39pm.csv
+
+# Embedded repositories
+.nvm/
+acs-calculator-project/
