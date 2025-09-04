@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Modal Elements</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .searchable-dropdown { position: relative; width: 100%; margin: 10px 0; }
+        .searchable-dropdown input { width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; }
+        .dropdown-options { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #e2e8f0; border-top: none; max-height: 200px; overflow-y: auto; display: none; }
+        .searchable-dropdown.active .dropdown-options { display: block; }
+        .dropdown-option { padding: 0.5rem; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
+        .dropdown-option:hover { background-color: #f8fafc; }
+    </style>
+</head>
+<body>
+    <h1>Debug Modal Elements</h1>
+    
+    <button id="openModal">Open Modal</button>
+    
+    <div id="debugModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Test Modal</h2>
+            
+            <div class="searchable-dropdown">
+                <input type="text" id="jobCategorySearch" placeholder="Type to search job categories..." autocomplete="off">
+                <div class="dropdown-options" id="categoryDropdown">
+                    <!-- Options will be populated dynamically -->
+                </div>
+            </div>
+            
+            <input type="hidden" id="selectedCategory" value="">
+            
+            <div>
+                <p>Selected: <span id="selectedDisplay">None</span></p>
+                <button onclick="testSelection()">Test Selection</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('debugModal');
+        const openBtn = document.getElementById('openModal');
+        const closeBtn = document.querySelector('.close');
+        const searchInput = document.getElementById('jobCategorySearch');
+        const dropdown = document.getElementById('categoryDropdown');
+        const selectedCategory = document.getElementById('selectedCategory');
+        const selectedDisplay = document.getElementById('selectedDisplay');
+        const searchableDropdown = document.querySelector('.searchable-dropdown');
+        
+        const testCategories = ['Nurses', 'Software Engineers', 'Doctors', 'Teachers', 'Managers'];
+        
+        openBtn.addEventListener('click', () => {
+            console.log('Opening modal...');
+            modal.style.display = 'block';
+            initializeDropdown();
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        function initializeDropdown() {
+            console.log('Initializing dropdown...');
+            console.log('Elements found:', {
+                searchInput: !!searchInput,
+                dropdown: !!dropdown,
+                selectedCategory: !!selectedCategory,
+                searchableDropdown: !!searchableDropdown
+            });
+            
+            if (!searchInput || !dropdown || !selectedCategory) {
+                console.error('Missing elements!');
+                return;
+            }
+            
+            // Add event listeners
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = testCategories.filter(cat => cat.toLowerCase().includes(query));
+                renderOptions(filtered);
+                showOptions();
+            });
+            
+            searchInput.addEventListener('focus', showOptions);
+            searchInput.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (!searchableDropdown.contains(document.activeElement)) {
+                        hideOptions();
+                    }
+                }, 150);
+            });
+        }
+        
+        function showOptions() {
+            searchableDropdown.classList.add('active');
+        }
+        
+        function hideOptions() {
+            searchableDropdown.classList.remove('active');
+        }
+        
+        function renderOptions(categories) {
+            dropdown.innerHTML = '';
+            categories.forEach(category => {
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                option.textContent = category;
+                option.addEventListener('click', () => {
+                    selectCategory(category);
+                });
+                dropdown.appendChild(option);
+            });
+        }
+        
+        function selectCategory(category) {
+            searchInput.value = category;
+            selectedCategory.value = category;
+            selectedDisplay.textContent = category;
+            hideOptions();
+        }
+        
+        function testSelection() {
+            const selected = selectedCategory.value;
+            alert('Selected: ' + (selected || 'None'));
+        }
+    </script>
+</body>
+</html>

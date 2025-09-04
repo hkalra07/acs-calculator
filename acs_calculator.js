@@ -96,8 +96,21 @@ class ACSCalculator {
             categoriesCount: this.allCategories ? this.allCategories.length : 0
         });
         
+        // Check if elements exist in DOM
+        console.log('DOM check:', {
+            searchInputExists: document.getElementById('jobCategorySearch') !== null,
+            dropdownExists: document.getElementById('categoryDropdown') !== null,
+            selectedCategoryExists: document.getElementById('selectedCategory') !== null,
+            searchableDropdownExists: document.querySelector('.searchable-dropdown') !== null
+        });
+        
         if (!searchInput || !dropdown || !selectedCategory) {
             console.error('Missing required elements for searchable dropdown');
+            console.error('Available elements in modal:', {
+                allInputs: document.querySelectorAll('input').length,
+                allDivs: document.querySelectorAll('div').length,
+                modalContent: document.querySelector('.modal-body') ? 'exists' : 'missing'
+            });
             return;
         }
 
@@ -609,12 +622,22 @@ const searchCategory = document.getElementById('searchCategory');
 
 // Open modal
 findSimilarBtn.addEventListener('click', () => {
+    console.log('Modal opening...');
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     
     // Initialize searchable dropdown when modal opens
+    console.log('Checking calculator and categories:', {
+        calculator: !!window.calculator,
+        allCategories: window.calculator ? window.calculator.allCategories : null,
+        categoriesLength: window.calculator && window.calculator.allCategories ? window.calculator.allCategories.length : 0
+    });
+    
     if (window.calculator && window.calculator.allCategories) {
+        console.log('Initializing searchable dropdown...');
         window.calculator.initializeSearchableDropdown();
+    } else {
+        console.error('Cannot initialize dropdown - missing calculator or categories');
     }
 });
 
