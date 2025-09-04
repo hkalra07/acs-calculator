@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACS Calculator - Joveo</title>
+    <link rel="stylesheet" href="acs_calculator.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Bar -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="joveo_logo.jpg" alt="Joveo Logo" class="joveo-logo-img">
+                </div>
+                <span class="logo-text">Joveo</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="form-container">
+            <div class="form-card">
+                <h1 class="form-title">
+                    <i class="fas fa-calculator"></i>
+                    Application Complexity Score (ACS) Calculator
+                </h1>
+                <p class="form-description">
+                    Calculate the complexity score for your job application process to optimize conversion rates and cost-per-application (CPA).
+                </p>
+
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button class="tab-button active" data-tab="calculator">ACS Calculator</button>
+                    <button class="tab-button" data-tab="database">Check ACS Database</button>
+                </div>
+
+                <!-- Calculator Tab -->
+                <div id="calculator-tab" class="tab-content active">
+                <form id="acsForm" class="acs-form">
+                    <!-- Client Information Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">Client Information</h2>
+                        
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="clientName" class="field-label">
+                                    Client Name <span class="required">*</span>
+                                </label>
+                                <input type="text" id="clientName" name="clientName" class="form-input" placeholder="Enter client name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="jobLink" class="field-label">Sample Job Link</label>
+                                <input type="url" id="jobLink" name="jobLink" class="form-input" placeholder="https://example.com/job-posting">
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="atsName" class="field-label">ATS Name</label>
+                                <input type="text" id="atsName" name="atsName" class="form-input" placeholder="e.g., Workday, ICIMS, Own ATS">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACS Calculation Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">Application Complexity Factors</h2>
+                        
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="pages" class="field-label">
+                                    Number of Pages <span class="required">*</span>
+                                </label>
+                                <select id="pages" name="pages" class="form-select" required>
+                                    <option value="">Select number of pages</option>
+                                    <option value="1">1 page</option>
+                                    <option value="2-5">2-5 pages</option>
+                                    <option value=">5">More than 5 pages</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="timeToFill" class="field-label">
+                                    Time to Fill <span class="required">*</span>
+                                </label>
+                                <select id="timeToFill" name="timeToFill" class="form-select" required>
+                                    <option value="">Select time to fill</option>
+                                    <option value="<5">Less than 5 minutes</option>
+                                    <option value="5-15">5-15 minutes</option>
+                                    <option value=">15">More than 15 minutes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="documents" class="field-label">
+                                    Documents Required <span class="required">*</span>
+                                </label>
+                                <select id="documents" name="documents" class="form-select" required>
+                                    <option value="">Select documents required</option>
+                                    <option value="0">0 documents (NA)</option>
+                                    <option value="1">1 document (typically resume)</option>
+                                    <option value=">1">More than 1 document</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div class="field-content">
+                                <label for="loginRequired" class="field-label">
+                                    Login Required <span class="required">*</span>
+                                </label>
+                                <select id="loginRequired" name="loginRequired" class="form-select" required>
+                                    <option value="">Select login requirement</option>
+                                    <option value="false">No login required</option>
+                                    <option value="true">Login required</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                                    <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-check"></i>
+                        Calculate ACS Score
+                    </button>
+                </div>
+
+
+                </form>
+
+                <!-- ACS Score Display Section -->
+                <div class="score-section" id="scoreSection" style="display: none;">
+                    <h2>🎯 ACS Score Results</h2>
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <span id="acsScore">0</span>
+                        </div>
+                        <div class="score-details">
+                            <p><strong>Complexity Level:</strong> <span id="complexityLevel">-</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Score Explanation Section -->
+                    <div class="score-explanation">
+                        <h3>What This Score Means:</h3>
+                        <div id="scoreExplanation" class="explanation-content"></div>
+                    </div>
+                    
+                    <!-- Business Implications Section -->
+                    <div class="business-implications">
+                        <h3>Business Implications:</h3>
+                        <div id="businessImplications" class="implications-content"></div>
+                    </div>
+                    
+                    <!-- NEW: Find Similar Clients Button -->
+                    <div class="similar-clients-section">
+                        <button id="findSimilarBtn" class="btn btn-primary btn-lg">
+                            🔍 Find Similar Clients
+                        </button>
+                        <p class="help-text">Discover clients with similar complexity levels and job categories</p>
+                    </div>
+                </div>
+                </div> <!-- End Calculator Tab -->
+
+                <!-- Database Tab -->
+                <div id="database-tab" class="tab-content">
+                    <div class="database-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-database"></i>
+                            ACS Database - All Clients
+                        </h2>
+                        <p class="section-description">
+                            Browse all clients in our database with their ACS scores and job categories.
+                        </p>
+                        
+                        <!-- Search and Filter Controls -->
+                        <div class="database-controls">
+                            <div class="search-controls">
+                                <div class="input-group">
+                                    <label for="databaseSearch">Search Clients:</label>
+                                    <input type="text" id="databaseSearch" placeholder="Search by client name..." class="form-input">
+                                </div>
+                                <div class="input-group">
+                                    <label for="databaseAcsFilter">Filter by ACS Score:</label>
+                                    <select id="databaseAcsFilter" class="form-select">
+                                        <option value="">All Scores</option>
+                                        <option value="1">ACS = 1 (Very Simple)</option>
+                                        <option value="2">ACS = 2 (Simple)</option>
+                                        <option value="3">ACS = 3 (Moderate)</option>
+                                        <option value="4">ACS = 4 (Complex)</option>
+                                        <option value="5">ACS = 5 (Very Complex)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Database Results -->
+                        <div class="database-results">
+                            <div class="results-header">
+                                <h3>Client Database</h3>
+                                <div class="results-summary">
+                                    <span id="databaseResultsCount">Loading...</span>
+                                </div>
+                            </div>
+                            
+                            <div class="loading-section" id="databaseLoadingSection">
+                                <div class="spinner"></div>
+                                <p>Loading client database...</p>
+                            </div>
+                            
+                            <div class="clients-table-container" id="clientsTableContainer" style="display: none;">
+                                <table class="clients-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Client Name</th>
+                                            <th>ACS Score</th>
+                                            <th>Complexity Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="clientsTableBody">
+                                        <!-- Data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="no-results" id="databaseNoResults" style="display: none;">
+                                <p>No clients found matching your criteria.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: Similar Clients Modal -->
+                <div id="similarClientsModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>🔍 Find Similar Clients</h2>
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="search-section">
+                                <h3>Enter Job Details</h3>
+                                <p>Find clients with similar job categories and ACS complexity levels</p>
+                                
+                                <div class="input-group">
+                                    <label for="jobTitleInput">Job Title or Category:</label>
+                                    <input type="text" id="jobTitleInput" placeholder="e.g., Software Engineer, Bank Teller, Sales Representative">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label for="jobCategorySelect">Or Select from Common Categories:</label>
+                                    <select id="jobCategorySelect">
+                                        <option value="">-- Select a category --</option>
+                                        <option value="Tellers">Tellers</option>
+                                        <option value="Software Developers">Software Developers</option>
+                                        <option value="Accountants and Auditors">Accountants and Auditors</option>
+                                        <option value="Registered Nurses">Registered Nurses</option>
+                                        <option value="Project Management Specialists">Project Management Specialists</option>
+                                        <option value="Human Resources Specialists">Human Resources Specialists</option>
+                                        <option value="Management Analysts">Management Analysts</option>
+                                        <option value="Customer Service Representatives">Customer Service Representatives</option>
+                                        <option value="Taxi Drivers">Taxi Drivers</option>
+                                        <option value="New Accounts Clerks">New Accounts Clerks</option>
+                                        <option value="Stockers and Order Fillers">Stockers and Order Fillers</option>
+                                        <option value="Financial Managers">Financial Managers</option>
+                                        <option value="Industrial Engineers">Industrial Engineers</option>
+                                        <option value="Network and Computer Systems Administrators">Network and Computer Systems Administrators</option>
+                                        <option value="Heavy and Tractor-Trailer Truck Drivers">Heavy and Tractor-Trailer Truck Drivers</option>
+                                        <option value="Computer User Support Specialists">Computer User Support Specialists</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label for="countrySelect">Country (Optional):</label>
+                                    <select id="countrySelect" class="form-select">
+                                        <option value="">All Countries</option>
+                                        <option value="United States">United States</option>
+                                        <option value="Germany">Germany</option>
+                                        <option value="Canada">Canada</option>
+                                        <option value="Switzerland">Switzerland</option>
+                                        <option value="Netherlands">Netherlands</option>
+                                        <option value="Australia">Australia</option>
+                                        <option value="Austria">Austria</option>
+                                        <option value="Argentina">Argentina</option>
+                                        <option value="Guadeloupe">Guadeloupe</option>
+                                        <option value="United Kingdom">United Kingdom</option>
+                                        <option value="France">France</option>
+                                        <option value="Spain">Spain</option>
+                                        <option value="Italy">Italy</option>
+                                        <option value="Brazil">Brazil</option>
+                                        <option value="Mexico">Mexico</option>
+                                        <option value="India">India</option>
+                                        <option value="Japan">Japan</option>
+                                        <option value="China">China</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <small class="help-text">Filter clients by specific country for more relevant results</small>
+                                </div>
+                                
+                                <button id="searchSimilarBtn" class="btn btn-primary">
+                                    🔍 Search Similar Clients
+                                </button>
+                            </div>
+                            
+                            <div class="results-section" id="resultsSection" style="display: none;">
+                                <h3>📊 Similar Clients Found</h3>
+                                <div class="results-summary">
+                                    <p>Showing clients with <strong><span id="searchCategory">-</span></strong> jobs and similar ACS complexity</p>
+                                </div>
+                                <div class="clients-list" id="clientsList">
+                                    <!-- Results will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <div class="loading-section" id="loadingSection" style="display: none;">
+                                <div class="spinner"></div>
+                                <p>Searching for similar clients...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="acs_calculator.js?v=1.2"></script>
+</body>
+</html>
